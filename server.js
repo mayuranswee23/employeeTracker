@@ -26,7 +26,9 @@ const db = require('./db/connection');
             getEmployees();
         } else if (action === 'add a department'){
             addDepartment();
-        } else if (action === 'add an employee'){
+        }   else if (action === 'add a role'){
+            addRole();
+        }   else if (action === 'add an employee'){
             addEmployee();
         } else if (action === 'update an employee role'){
             updateEmployee();
@@ -36,7 +38,6 @@ const db = require('./db/connection');
         }
     })
 };
-
 
 
 function getDepartments(){
@@ -89,6 +90,36 @@ function addDepartment(){
         })
     })
 };
+
+function addRole(){
+
+    inquirer.prompt([
+        {
+            name: "roleName",
+            type: "input",
+            message: "Enter the role title"
+        },
+        {
+            name: "roleSalary",
+            type: "input",
+            message: "Enter the role salary"
+        },
+        {
+            name: "roleDept",
+            type: "list",
+            message: "Enter the Dept. ID",
+            choices: [1, 2, 3, 4]
+        }
+    ]) .then (response => {
+        const sql = `INSERT INTO role (title, salary, department_id) VALUES ("${response.roleName}", "${response.roleSalary}", "${response.roleDept}")`;
+        db.query(sql, (err,res) => {
+            if (err) throw err;
+            console.table(res)
+            startPrompts();
+        })
+    });
+}
+
 
 startPrompts();
 
