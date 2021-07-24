@@ -1,5 +1,5 @@
 {
-  "name": "employeeTracker",
+  "name": "employeetracker",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/mayuranswee23/employeeTracker#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "express": "^4.17.1",
+    "inquirer": "^8.1.2",
     "mysql2": "^2.2.5"
   }
 }
