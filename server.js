@@ -63,7 +63,10 @@ function getPositions(){
 };
 
 function getEmployees(){
-    const sql = `SELECT * FROM employee;`;
+    const sql = `SELECT employee.*, department.name as Department, role.salary as Salary
+    FROM employee
+    INNER JOIN role ON employee.role_id = role.id
+    INNER join department ON role.department_id = department.id`;
 
     db.query(sql, (err, res) => {
         if (err) throw err;
@@ -120,6 +123,61 @@ function addRole(){
     });
 }
 
+function addEmployee(){
+    inquirer.prompt([
+        {
+            name: "firstName", 
+            type: "input",
+            message: "Enter the first name"
+        },
+        {
+            name: "lastName",
+            type: "input",
+            message: "Enter the last name"
+        },
+        {
+            name: "employeeRole",
+            type: "list",
+            message: "Enter the role ID",
+            choices: [1, 2, 3, 4, 5, 6, 7, 8]
+        },
+        {
+            name: "managerID",
+            type: "list",
+            message: "Enter the manager ID",
+            choices: [1, 2, 3, 4]
+        }
+    ]). then (response => {
+        const sql = `INSERT INTO employee (first_Name, last_Name, role_id, manager_id) VALUES ("${response.firstName}", "${response.lastName}", "${response.employeeRole}", "${response.managerID}")`;
+        db.query(sql, (err, res) => {
+            if (err) throw err; 
+            console.table(res)
+            startPrompts();
+        })
+    });
+}
+
+function updateEmployee(){
+    inquirer.prompt ([
+        {
+            name: "employeeID",
+            type: "input",
+            message: "What is the employee ID"
+        },
+        {
+            name: "roleID",
+            type: "input",
+            message: "Enter the new role ID"
+        }
+    ]). then ( response => {
+        const sql = `UPDATE employee SET role_id = ${response.roleID} WHERE id = ${response.employeeID}`;
+        db.query(sql, (err, res) => {
+            if (err) throw err;
+            console.table(res)
+            startPrompts();
+        })
+    });
+}
 
 startPrompts();
 
